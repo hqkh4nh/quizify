@@ -1,0 +1,60 @@
+{
+  "title": "Quizify Demo — Web & Languages",
+  "description": "A short sample quiz showcasing single/multi answers, code snippets, and multilingual text rendering (UTF-8).",
+  "questions": [
+    {
+      "question": "Which JavaScript runtime executes code outside the browser?",
+      "type": "single",
+      "options": ["Node.js", "Django", "Laravel", "Rails"],
+      "answer": 0,
+      "explanation": "Node.js is a JavaScript runtime built on V8 that runs JS on the server and in CLIs."
+    },
+    {
+      "question": "Select all valid ways to declare a variable in modern JavaScript.",
+      "type": "multi",
+      "options": ["let", "const", "var", "define"],
+      "answer": [0, 1, 2],
+      "explanation": "`let`, `const`, and `var` all declare variables. `define` is not a JS keyword."
+    },
+    {
+      "question": "What does this snippet log?\n\nconst xs = [1, 2, 3];\nconst total = xs.reduce((a, b) => a + b, 0);\nconsole.log(total);",
+      "type": "single",
+      "options": ["6", "123", "undefined", "NaN"],
+      "answer": 0,
+      "explanation": "reduce sums the array starting from 0: 0 + 1 + 2 + 3 = 6."
+    },
+    {
+      "question": "Đâu là ngôn ngữ lập trình được dùng phổ biến cho phát triển web phía trình duyệt? (Tiếng Việt)",
+      "type": "single",
+      "options": ["JavaScript", "Python", "C++", "Kotlin"],
+      "answer": 0,
+      "explanation": "JavaScript là ngôn ngữ chạy trực tiếp trong trình duyệt để xây dựng giao diện web."
+    },
+    {
+      "question": "以下哪一项是用于样式设计的语言？(中文 / Chinese)",
+      "type": "single",
+      "options": ["CSS", "SQL", "JSON", "HTTP"],
+      "answer": 0,
+      "explanation": "CSS (层叠样式表) 用于描述网页的外观和布局。"
+    },
+    {
+      "question": "اختر لغة الترميز المستخدمة لبناء صفحات الويب. (العربية / Arabic)",
+      "type": "single",
+      "options": ["HTML", "Java", "Ruby", "Go"],
+      "answer": 0,
+      "explanation": "HTML هي لغة الترميز القياسية لإنشاء صفحات الويب."
+    },
+    {
+      "question": "Which of the following are true about HTTP status codes? This question intentionally contains a very long line to verify wrapping behavior: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status?some_extremely_long_query_parameter_that_should_wrap=true&another=value",
+      "type": "multi",
+      "options": [
+        "200 means OK",
+        "404 means Not Found",
+        "500 means Moved Permanently",
+        "301 means Internal Server Error"
+      ],
+      "answer": [0, 1],
+      "explanation": "200 = OK and 404 = Not Found. 500 is Internal Server Error and 301 is Moved Permanently — the last two options swap those meanings."
+    }
+  ]
+}
