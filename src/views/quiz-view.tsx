@@ -28,7 +28,7 @@ export function QuizView() {
 
   const optionRow = (selectedState: boolean) =>
     cn(
-      'flex cursor-pointer items-start gap-3.5 rounded-xl border p-4 transition-colors',
+      'flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors',
       selectedState
         ? 'border-primary bg-primary/5'
         : 'border-border hover:bg-accent/50',
@@ -37,7 +37,7 @@ export function QuizView() {
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-6">
       {/* Progress header */}
-      <div className="space-y-2.5">
+      <div className="space-y-2">
         <div className="flex items-center justify-between gap-4 text-sm">
           <span className="font-medium text-muted-foreground">
             Question{' '}
@@ -47,7 +47,7 @@ export function QuizView() {
             of <span className="tabular-nums">{total}</span>
           </span>
           {quiz.title && (
-            <span className="min-w-0 truncate font-display font-medium text-muted-foreground">
+            <span className="min-w-0 truncate font-medium text-muted-foreground">
               {quiz.title}
             </span>
           )}
@@ -63,7 +63,7 @@ export function QuizView() {
               {question.question}
             </h2>
             {question.type === 'multi' && (
-              <p className="text-sm font-medium text-primary">
+              <p className="text-sm font-medium text-muted-foreground">
                 Select all that apply
               </p>
             )}

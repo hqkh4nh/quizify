@@ -74,13 +74,12 @@ export function UploadView() {
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-8 animate-fade-up">
-      <div className="space-y-3 text-center">
-        <h1 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+      <div className="space-y-3">
+        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
           Take a quiz from a file
         </h1>
-        <p className="text-pretty text-base text-muted-foreground sm:text-lg">
-          Drop in a JSON quiz and answer it right here. No accounts, no uploads —
-          everything runs in your browser.
+        <p className="text-base text-muted-foreground sm:text-lg">
+          Load a JSON quiz file and answer it here. Nothing is uploaded.
         </p>
       </div>
 
@@ -138,7 +137,7 @@ export function UploadView() {
         />
       </button>
 
-      <div className="flex items-center justify-center">
+      <div className="flex">
         <Button variant="outline" onClick={loadSample} disabled={busy}>
           <Sparkles /> Try the sample quiz
         </Button>
@@ -148,9 +147,7 @@ export function UploadView() {
       <section className="rounded-2xl border bg-card p-6">
         <div className="mb-3 flex items-center gap-2">
           <FileJson className="size-4 text-primary" />
-          <h2 className="font-display text-base font-semibold">
-            Expected JSON format
-          </h2>
+          <h2 className="text-base font-semibold">Expected JSON format</h2>
         </div>
         <p className="mb-4 text-sm text-muted-foreground">
           A quiz is an object with a <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">questions</code>{' '}
@@ -164,9 +161,9 @@ export function UploadView() {
         </pre>
       </section>
 
-      <p className="flex items-center justify-center gap-1.5 text-center text-xs text-muted-foreground">
-        <FileUp className="size-3.5" />
-        Tip: invalid files show exactly what needs fixing.
+      <p className="flex items-center gap-2 text-xs text-muted-foreground">
+        <FileUp className="size-4" />
+        Invalid files show exactly what needs fixing.
       </p>
     </div>
   )

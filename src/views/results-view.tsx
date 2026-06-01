@@ -25,11 +25,11 @@ export function ResultsView() {
     <div className="mx-auto flex max-w-2xl flex-col gap-8 animate-fade-up">
       {/* Score summary */}
       <Card className="overflow-hidden">
-        <CardContent className="flex flex-col items-center gap-3 p-8 text-center sm:p-10">
+        <CardContent className="flex flex-col items-start gap-3 p-8 sm:p-10">
           <p className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
             Your score
           </p>
-          <p className="font-display text-6xl font-semibold leading-none tracking-tight sm:text-7xl">
+          <p className="text-6xl font-semibold leading-none tracking-tight sm:text-7xl">
             {correctCount}
             <span className="text-muted-foreground/60"> / {total}</span>
           </p>
@@ -53,9 +53,7 @@ export function ResultsView() {
             <span className="grid size-14 place-items-center rounded-full bg-success/10 text-success">
               <PartyPopper className="size-7" />
             </span>
-            <h2 className="font-display text-2xl font-semibold">
-              Perfect score!
-            </h2>
+            <h2 className="text-2xl font-semibold">Perfect score!</h2>
             <p className="text-pretty text-muted-foreground">
               You answered every question correctly. Nothing to review here.
             </p>
@@ -63,7 +61,7 @@ export function ResultsView() {
         </Card>
       ) : (
         <section className="space-y-4">
-          <h2 className="font-display text-xl font-semibold tracking-tight">
+          <h2 className="text-xl font-semibold tracking-tight">
             Review{' '}
             <span className="text-muted-foreground">
               ({incorrect.length} to revisit)
@@ -78,9 +76,9 @@ export function ResultsView() {
                     {question.question}
                   </p>
 
-                  <div className="space-y-2.5 text-sm">
+                  <div className="space-y-2 text-sm">
                     {/* Your answer */}
-                    <div className="flex items-start gap-2.5">
+                    <div className="flex items-start gap-2">
                       <X className="mt-0.5 size-4 shrink-0 text-destructive" />
                       <p className="text-balance-safe min-w-0">
                         <span className="font-medium text-muted-foreground">
@@ -101,7 +99,7 @@ export function ResultsView() {
                     </div>
 
                     {/* Correct answer */}
-                    <div className="flex items-start gap-2.5">
+                    <div className="flex items-start gap-2">
                       <Check className="mt-0.5 size-4 shrink-0 text-success" />
                       <p className="text-balance-safe min-w-0">
                         <span className="font-medium text-muted-foreground">
@@ -133,7 +131,7 @@ export function ResultsView() {
         </section>
       )}
 
-      <div className="flex justify-center">
+      <div className="flex">
         <Button size="lg" onClick={reset}>
           <RotateCcw /> Start over
         </Button>
