@@ -62,7 +62,7 @@ export function UploadView() {
   async function loadSample() {
     setBusy(true)
     try {
-      const res = await fetch('/sample-quiz.json')
+      const res = await fetch(`${import.meta.env.BASE_URL}sample-quiz.json`)
       if (!res.ok) throw new Error('fetch failed')
       handleResult(validateQuizText(await res.text()), 'sample quiz')
     } catch {
