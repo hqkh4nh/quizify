@@ -10,8 +10,11 @@ export default {
     },
     extend: {
       fontFamily: {
+        // One synchronized sans family for all UI. `display` deliberately maps
+        // to the same stack as `sans` — hierarchy comes from size/weight, not a
+        // second typeface. Mono is reserved exclusively for code.
         sans: ['"Hanken Grotesk"', 'system-ui', '"Segoe UI"', 'sans-serif'],
-        display: ['"Fraunces"', 'Georgia', 'serif'],
+        display: ['"Hanken Grotesk"', 'system-ui', '"Segoe UI"', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       colors: {
