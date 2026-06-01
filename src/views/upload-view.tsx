@@ -1,11 +1,57 @@
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { FileJson, FileUp, Sparkles, UploadCloud } from 'lucide-react'
+import { FileJson, FileUp, Shuffle, Sparkles, UploadCloud } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 import { loadQuizFile, validateQuizText } from '@/lib/load-quiz-file'
 import type { ValidationResult } from '@/lib/quiz-schema'
 import { useQuizStore } from '@/store/quiz-store'
+import { useShuffleStore } from '@/store/shuffle-store'
+
+interface ShuffleToggleProps {
+  id: string
+  label: string
+  description: string
+  checked: boolean
+  onToggle: () => void
+}
+
+function ShuffleToggle({
+  id,
+  label,
+  description,
+  checked,
+  onToggle,
+}: ShuffleToggleProps) {
+  return (
+    <Label
+      htmlFor={id}
+      className={cn(
+        'flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-colors',
+        checked
+          ? 'border-primary bg-primary/5'
+          : 'border-border hover:bg-accent/50',
+      )}
+    >
+      <Checkbox
+        id={id}
+        checked={checked}
+        onCheckedChange={onToggle}
+        className="mt-0.5"
+      />
+      <span className="min-w-0 space-y-1">
+        <span className="block text-sm font-medium text-foreground">
+          {label}
+        </span>
+        <span className="block text-sm font-normal text-muted-foreground">
+          {description}
+        </span>
+      </span>
+    </Label>
+  )
+}
 
 const SAMPLE_JSON = `{
   "title": "My Quiz",
@@ -28,6 +74,10 @@ const SAMPLE_JSON = `{
 
 export function UploadView() {
   const loadQuiz = useQuizStore((s) => s.loadQuiz)
+  const shuffleQuestions = useShuffleStore((s) => s.shuffleQuestions)
+  const shuffleAnswers = useShuffleStore((s) => s.shuffleAnswers)
+  const toggleQuestions = useShuffleStore((s) => s.toggleQuestions)
+  const toggleAnswers = useShuffleStore((s) => s.toggleAnswers)
   const [dragging, setDragging] = useState(false)
   const [busy, setBusy] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -136,6 +186,30 @@ export function UploadView() {
           }}
         />
       </button>
+
+      {/* Shuffle preferences — applied to the next quiz you load; remembered. */}
+      <section className="space-y-3">
+        <div className="flex items-center gap-2">
+          <Shuffle className="size-4 text-primary" />
+          <h2 className="text-base font-semibold">Shuffle</h2>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <ShuffleToggle
+            id="shuffle-questions"
+            label="Shuffle questions"
+            description="Randomize the order of questions."
+            checked={shuffleQuestions}
+            onToggle={toggleQuestions}
+          />
+          <ShuffleToggle
+            id="shuffle-answers"
+            label="Shuffle answers"
+            description="Randomize the options within each question."
+            checked={shuffleAnswers}
+            onToggle={toggleAnswers}
+          />
+        </div>
+      </section>
 
       <div className="flex">
         <Button variant="outline" onClick={loadSample} disabled={busy}>

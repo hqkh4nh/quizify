@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import type { AnswerMap, Quiz } from '@/types/quiz'
 import { scoreQuiz, type ScoreResult } from '@/lib/score'
+import { shuffleQuiz } from '@/lib/shuffle'
+import { useShuffleStore } from '@/store/shuffle-store'
 
 export type Phase = 'upload' | 'quiz' | 'results'
 
@@ -27,8 +29,17 @@ export const useQuizStore = create<QuizState>((set, get) => ({
   currentIndex: 0,
   answers: {},
 
-  loadQuiz: (quiz) =>
-    set({ quiz, phase: 'quiz', currentIndex: 0, answers: {} }),
+  loadQuiz: (quiz) => {
+    // Apply the user's shuffle preferences once, here, so the resulting order
+    // is stable for the whole take (navigating never re-shuffles). Read the
+    // shuffle store imperatively to avoid reactive coupling between stores.
+    const { shuffleQuestions, shuffleAnswers } = useShuffleStore.getState()
+    const ordered = shuffleQuiz(quiz, {
+      questions: shuffleQuestions,
+      answers: shuffleAnswers,
+    })
+    set({ quiz: ordered, phase: 'quiz', currentIndex: 0, answers: {} })
+  },
 
   selectAnswer: (questionId, optionId) => {
     const { quiz, answers } = get()
