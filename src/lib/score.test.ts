@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { scoreQuiz } from './score'
+import { scoreQuiz, isQuestionCorrect } from './score'
 import type { Quiz } from '@/types/quiz'
 
 const quiz: Quiz = {
@@ -60,5 +60,26 @@ describe('scoreQuiz', () => {
     const score = scoreQuiz(quiz, {})
     expect(score.correctCount).toBe(0)
     expect(score.results[0].selectedIds).toEqual([])
+  })
+})
+
+describe('isQuestionCorrect', () => {
+  const single = quiz.questions[0] // correct: ['q0-o1']
+  const multi = quiz.questions[1] // correct: ['q1-o0', 'q1-o2']
+
+  it('accepts the right single answer and rejects the wrong one', () => {
+    expect(isQuestionCorrect(single, ['q0-o1'])).toBe(true)
+    expect(isQuestionCorrect(single, ['q0-o0'])).toBe(false)
+  })
+
+  it('requires an exact set for multi-answer, ignoring order', () => {
+    expect(isQuestionCorrect(multi, ['q1-o2', 'q1-o0'])).toBe(true)
+    expect(isQuestionCorrect(multi, ['q1-o0'])).toBe(false) // subset
+    expect(isQuestionCorrect(multi, ['q1-o0', 'q1-o1', 'q1-o2'])).toBe(false) // superset
+  })
+
+  it('treats an empty selection as incorrect', () => {
+    expect(isQuestionCorrect(single, [])).toBe(false)
+    expect(isQuestionCorrect(multi, [])).toBe(false)
   })
 })

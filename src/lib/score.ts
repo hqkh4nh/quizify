@@ -20,6 +20,18 @@ function setsEqual(a: string[], b: string[]): boolean {
 }
 
 /**
+ * True when the selected option ids exactly match the question's correct set —
+ * the same rule used for final scoring (no partial credit). Useful for inline
+ * per-question feedback so it can never diverge from the score.
+ */
+export function isQuestionCorrect(
+  question: QuizQuestion,
+  selectedIds: string[],
+): boolean {
+  return setsEqual(selectedIds, question.correctIds)
+}
+
+/**
  * Score a quiz against the user's answers. A question is correct only when the
  * selected option set exactly matches the correct option set — no partial
  * credit, and an unanswered question counts as incorrect.
@@ -30,7 +42,7 @@ export function scoreQuiz(quiz: Quiz, answers: AnswerMap): ScoreResult {
     return {
       question,
       selectedIds,
-      correct: setsEqual(selectedIds, question.correctIds),
+      correct: isQuestionCorrect(question, selectedIds),
     }
   })
 

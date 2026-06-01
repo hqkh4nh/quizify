@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { FileJson, FileUp, Shuffle, Sparkles, UploadCloud } from 'lucide-react'
+import { Eye, FileJson, FileUp, Shuffle, Sparkles, UploadCloud } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
@@ -9,8 +9,9 @@ import { loadQuizFile, validateQuizText } from '@/lib/load-quiz-file'
 import type { ValidationResult } from '@/lib/quiz-schema'
 import { useQuizStore } from '@/store/quiz-store'
 import { useShuffleStore } from '@/store/shuffle-store'
+import { useRevealStore } from '@/store/reveal-store'
 
-interface ShuffleToggleProps {
+interface ToggleRowProps {
   id: string
   label: string
   description: string
@@ -18,13 +19,7 @@ interface ShuffleToggleProps {
   onToggle: () => void
 }
 
-function ShuffleToggle({
-  id,
-  label,
-  description,
-  checked,
-  onToggle,
-}: ShuffleToggleProps) {
+function ToggleRow({ id, label, description, checked, onToggle }: ToggleRowProps) {
   return (
     <Label
       htmlFor={id}
@@ -53,6 +48,43 @@ function ShuffleToggle({
   )
 }
 
+interface SegmentedChoiceProps {
+  label: string
+  value: string
+  options: { value: string; label: string }[]
+  onChange: (value: string) => void
+}
+
+function SegmentedChoice({
+  label,
+  value,
+  options,
+  onChange,
+}: SegmentedChoiceProps) {
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      <span className="text-sm font-medium text-foreground">{label}</span>
+      <div className="inline-flex rounded-lg border border-border p-1">
+        {options.map((opt) => (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => onChange(opt.value)}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              value === opt.value
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:text-foreground',
+            )}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 const SAMPLE_JSON = `{
   "title": "My Quiz",
   "questions": [
@@ -78,6 +110,12 @@ export function UploadView() {
   const shuffleAnswers = useShuffleStore((s) => s.shuffleAnswers)
   const toggleQuestions = useShuffleStore((s) => s.toggleQuestions)
   const toggleAnswers = useShuffleStore((s) => s.toggleAnswers)
+  const revealEnabled = useRevealStore((s) => s.revealEnabled)
+  const revealStyle = useRevealStore((s) => s.revealStyle)
+  const lockAfterReveal = useRevealStore((s) => s.lockAfterReveal)
+  const setRevealEnabled = useRevealStore((s) => s.setRevealEnabled)
+  const setRevealStyle = useRevealStore((s) => s.setRevealStyle)
+  const setLockAfterReveal = useRevealStore((s) => s.setLockAfterReveal)
   const [dragging, setDragging] = useState(false)
   const [busy, setBusy] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -194,14 +232,14 @@ export function UploadView() {
           <h2 className="text-base font-semibold">Shuffle</h2>
         </div>
         <div className="grid gap-3 sm:grid-cols-2">
-          <ShuffleToggle
+          <ToggleRow
             id="shuffle-questions"
             label="Shuffle questions"
             description="Randomize the order of questions."
             checked={shuffleQuestions}
             onToggle={toggleQuestions}
           />
-          <ShuffleToggle
+          <ToggleRow
             id="shuffle-answers"
             label="Shuffle answers"
             description="Randomize the options within each question."
@@ -209,6 +247,43 @@ export function UploadView() {
             onToggle={toggleAnswers}
           />
         </div>
+      </section>
+
+      {/* Reveal / practice mode — feedback per question as you go; remembered. */}
+      <section className="space-y-3">
+        <div className="flex items-center gap-2">
+          <Eye className="size-4 text-primary" />
+          <h2 className="text-base font-semibold">Reveal answers</h2>
+        </div>
+        <ToggleRow
+          id="reveal-enabled"
+          label="Reveal answers as you go"
+          description="Show whether each answer is right, plus the explanation, during the quiz."
+          checked={revealEnabled}
+          onToggle={() => setRevealEnabled(!revealEnabled)}
+        />
+        {revealEnabled && (
+          <div className="space-y-4 rounded-xl border border-border bg-card p-4">
+            <SegmentedChoice
+              label="Reveal style"
+              value={revealStyle}
+              options={[
+                { value: 'check', label: 'Check button' },
+                { value: 'auto', label: 'On select' },
+              ]}
+              onChange={(v) => setRevealStyle(v === 'auto' ? 'auto' : 'check')}
+            />
+            <SegmentedChoice
+              label="After reveal"
+              value={lockAfterReveal ? 'lock' : 'free'}
+              options={[
+                { value: 'lock', label: 'Lock question' },
+                { value: 'free', label: 'Allow changing' },
+              ]}
+              onChange={(v) => setLockAfterReveal(v === 'lock')}
+            />
+          </div>
+        )}
       </section>
 
       <div className="flex">
